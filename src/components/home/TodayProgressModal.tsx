@@ -111,8 +111,8 @@ export const TodayProgressModal: React.FC<TodayProgressModalProps> = ({
                   onClick={() => onUpdateQuality(q)}
                   className={`py-2 px-3 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
                     quality === q
-                      ? "bg-[#2563EB] text-white border-[#2563EB] shadow-xs font-semibold"
-                      : "bg-white text-[#475569] border-[#E2E8F0] hover:bg-[#F1F5F9]"
+                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs font-semibold"
+                      : "bg-white text-[#475569] border-[#E2E8F0] hover:bg-emerald-50/50"
                   }`}
                 >
                   {q}
@@ -156,11 +156,7 @@ export const TodayProgressModal: React.FC<TodayProgressModalProps> = ({
               onMarkDone();
               onClose();
             }}
-            className={`w-full py-3 rounded-2xl text-xs font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98] ${
-              isTodayDone
-                ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+            className="w-full py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98] bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white"
           >
             <Check className="w-4 h-4 stroke-[2.5]" />
             <span>{isTodayDone ? "Save & Keep Marked Done" : "Confirm & Mark Today Complete"}</span>

@@ -54,23 +54,23 @@ export const HomeScreen: React.FC = () => {
   const [targetReaderPage, setTargetReaderPage] = useState<number>(daurSession.todayStartPage || 1);
 
   const weakParas = paras.filter(p => p.isWeakArea);
-  const percentDaur = Math.round((daurSession.completedParas / daurSession.totalParas) * 100);
-  const todayPercent = Math.min(100, Math.round((daurSession.todayPagesRead / daurSession.todayTargetPages) * 100));
+  const percentDaur = Math.round((daurSession.completedParas / Math.max(1, daurSession.totalParas)) * 100);
+  const todayPercent = Math.min(100, Math.round((daurSession.todayPagesRead / Math.max(1, daurSession.todayTargetPages)) * 100));
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   const getHeatmapColor = (level: string) => {
     switch (level) {
       case "excellent":
-        return "bg-[#1E7B58]";
+        return "bg-emerald-800 text-white";
       case "good":
-        return "bg-[#38A169]";
+        return "bg-emerald-600 text-white";
       case "low":
-        return "bg-[#86EFAC]";
+        return "bg-emerald-400 text-emerald-950";
       case "poor":
-        return "bg-[#FCA5A5]";
+        return "bg-rose-300 text-rose-950";
       default:
-        return "bg-[#E5E7EB]";
+        return "bg-slate-200/80 text-slate-500";
     }
   };
 
@@ -98,8 +98,10 @@ export const HomeScreen: React.FC = () => {
     };
   });
 
+  const bannerImage = auth.bannerUrl || "/images/hero_banner.jpg";
+
   return (
-    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F5F8F7]">
+    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F2F7F4]">
       {/* 1. TOP HEADER: Greeting + Avatar (Profile) + Plan Button + Notification */}
       <header className="flex items-center justify-between">
         <div 
@@ -107,15 +109,29 @@ export const HomeScreen: React.FC = () => {
           className="flex items-center gap-3 cursor-pointer group"
           title="Open Profile & Settings"
         >
-          <div className="w-10 h-10 rounded-full bg-[#1E3A8A] text-white font-bold flex items-center justify-center border-2 border-white shadow-xs group-hover:scale-105 transition-transform">
-            {auth.name.charAt(0)}
-          </div>
+          {auth.avatarUrl ? (
+            auth.avatarUrl.startsWith("http") || auth.avatarUrl.startsWith("data:") ? (
+              <img 
+                src={auth.avatarUrl} 
+                alt={auth.name} 
+                className="w-10 h-10 rounded-full object-cover border-2 border-emerald-600 shadow-xs group-hover:scale-105 transition-transform"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-700 to-teal-600 text-white font-bold flex items-center justify-center text-lg border-2 border-emerald-600 shadow-xs group-hover:scale-105 transition-transform">
+                {auth.avatarUrl}
+              </div>
+            )
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-800 to-teal-700 text-white font-bold flex items-center justify-center border-2 border-white shadow-xs group-hover:scale-105 transition-transform">
+              {auth.name ? auth.name.charAt(0).toUpperCase() : "H"}
+            </div>
+          )}
           <div>
-            <span className="text-[11px] text-[#6B7280] font-medium block leading-none">
+            <span className="text-[11px] text-emerald-800/70 font-semibold block leading-none">
               Assalamu Alaikum,
             </span>
-            <h1 className="text-base font-bold text-[#111827] mt-0.5 group-hover:text-[#2563EB] transition-colors">
-              {auth.name}
+            <h1 className="text-base font-extrabold text-emerald-950 mt-0.5 group-hover:text-emerald-700 transition-colors font-heading">
+              {auth.name || "Hafiz"}
             </h1>
           </div>
         </div>
@@ -123,108 +139,108 @@ export const HomeScreen: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsPlanSetupOpen(true)}
-            className="px-2.5 py-1.5 rounded-xl bg-white border border-[#E5E7EB] text-[#2563EB] text-[11px] font-bold flex items-center gap-1 shadow-2xs hover:bg-[#EFF6FF] cursor-pointer active:scale-95"
+            className="px-2.5 py-1.5 rounded-xl bg-white border border-emerald-200 text-emerald-700 text-[11px] font-bold flex items-center gap-1 shadow-2xs hover:bg-emerald-50 cursor-pointer active:scale-95"
           >
             <span>🎯 Plan</span>
           </button>
           <button
             onClick={() => setIsNotificationsOpen(true)}
-            className="w-9 h-9 rounded-full bg-white border border-[#E5E7EB] text-[#4B5563] flex items-center justify-center shadow-2xs hover:bg-[#EFF6FF] hover:text-[#2563EB] hover:border-[#BFDBFE] cursor-pointer transition-all active:scale-95 relative"
+            className="w-9 h-9 rounded-full bg-white border border-emerald-200 text-emerald-800 flex items-center justify-center shadow-2xs hover:bg-emerald-50 hover:text-emerald-900 cursor-pointer transition-all active:scale-95 relative"
             aria-label="View Notifications & Reminders"
           >
             <Bell className="w-4 h-4" />
-            <span className="w-2 h-2 rounded-full bg-[#2563EB] absolute top-2 right-2"></span>
+            <span className="w-2 h-2 rounded-full bg-amber-500 absolute top-2 right-2"></span>
           </button>
         </div>
       </header>
 
-      {/* 2 & 3. CLEAN UNIFIED HERO & CURRENT DAUR CARD (Simple, Visual, Tap for popup) */}
+      {/* 2 & 3. CLEAN UNIFIED HERO & CURRENT DAUR CARD */}
       <div 
         onClick={() => setIsDaurDetailOpen(true)}
-        className="bg-white rounded-3xl border border-[#BAE6FD] shadow-xs overflow-hidden cursor-pointer group hover:border-[#2563EB]/50 transition-all"
+        className="bg-white rounded-3xl border border-emerald-200 shadow-xs overflow-hidden cursor-pointer group hover:border-emerald-400 transition-all"
         title="Tap to see Daur milestones & breakdown"
       >
         {/* Top Header: Islamic Verse Banner with Mosque Artwork */}
-        <div className="relative overflow-hidden text-[#0F2942] p-5 min-h-[135px] flex flex-col justify-center border-b border-[#BAE6FD]/60">
+        <div className="relative overflow-hidden text-[#0F2942] p-5 min-h-[140px] flex flex-col justify-center border-b border-emerald-200/70">
           {/* HD Background Banner */}
           <div 
             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-            style={{ backgroundImage: "url('/images/hero_banner.jpg')" }}
+            style={{ backgroundImage: `url('${bannerImage}')` }}
           />
 
-          {/* Soft daylight gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#8EC5F7]/95 via-[#A8D5F9]/80 to-transparent pointer-events-none" />
+          {/* Soft Islamic daylight/emerald gradient overlay for clear text */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#042B20]/95 via-[#063B2C]/85 to-transparent pointer-events-none" />
 
-          <div className="relative z-10 text-left max-w-[75%] py-0.5 space-y-1.5">
-            <p className="font-arabic text-2xl font-bold tracking-wide text-[#0B2545] leading-relaxed drop-shadow-xs">
+          <div className="relative z-10 text-left max-w-[80%] py-0.5 space-y-1.5">
+            <p className="font-arabic text-2xl font-bold tracking-wide text-amber-300 leading-relaxed drop-shadow-md">
               وَقُل رَّبِّ زِدْنِي عِلْمًا
             </p>
-            <p className="text-xs text-[#1E3A8A] font-semibold italic leading-normal drop-shadow-xs">
+            <p className="text-xs text-emerald-100 font-semibold italic leading-normal drop-shadow-xs">
               &ldquo;And say: &lsquo;My Lord, increase me in knowledge.&rsquo;&rdquo;
             </p>
             <div className="pt-0.5">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#1D4ED8] bg-white/85 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/80 shadow-2xs">
-                <BookOpen className="w-3 h-3 text-[#2563EB]" />
-                (Taha 20:114)
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-amber-300 bg-black/40 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-amber-400/40 shadow-2xs">
+                <BookOpen className="w-3 h-3 text-amber-400" />
+                (Surah Taha 20:114)
               </span>
             </div>
           </div>
         </div>
 
         {/* Clean, Simple Current Daur Progress Row */}
-        <div className="p-4 space-y-3 bg-gradient-to-b from-white to-[#F8FAFC]">
+        <div className="p-4 space-y-3 bg-gradient-to-b from-white to-[#F9FCFA]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-[#2563EB]" />
-              <span className="text-sm font-extrabold text-[#0F172A]">
-                {daurSession.planConfig?.planName || "Full Quran Daur"}
+              <BookOpen className="w-4 h-4 text-emerald-600" />
+              <span className="text-sm font-extrabold text-emerald-950 font-heading">
+                {daurSession.planConfig?.planName || "30 Days Complete Daur"}
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-black text-[#2563EB]">
+              <span className="text-xs font-black text-emerald-700">
                 {percentDaur}%
               </span>
-              <span className="text-[10px] font-bold text-[#64748B] bg-[#F1F5F9] px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
                 Day {daurSession.currentDay}/{daurSession.totalDays}
               </span>
             </div>
           </div>
 
           {/* Sleek Progress Bar */}
-          <div className="w-full h-2.5 rounded-full bg-[#E2E8F0] overflow-hidden p-0.5 shadow-inner">
+          <div className="w-full h-2.5 rounded-full bg-emerald-100/70 overflow-hidden p-0.5 shadow-inner">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#10B981] transition-all duration-500"
-              style={{ width: `${percentDaur}%` }}
+              className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-teal-500 to-amber-400 transition-all duration-500"
+              style={{ width: `${Math.max(percentDaur, percentDaur === 0 ? 0 : 3)}%` }}
             />
           </div>
 
           {/* 3 Clean Stat Badges */}
           <div className="grid grid-cols-3 gap-2 pt-1 text-center">
-            <div className="bg-[#F8FAFC] py-2 px-1.5 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[9px] text-[#64748B] font-bold block leading-none">Completed</span>
-              <span className="text-xs font-extrabold text-[#0F172A] mt-1 block">{daurSession.completedParas} Paras</span>
+            <div className="bg-[#F4F8F5] py-2 px-1.5 rounded-xl border border-emerald-100">
+              <span className="text-[9px] text-emerald-800/70 font-bold block leading-none">Completed</span>
+              <span className="text-xs font-black text-emerald-950 mt-1 block">{daurSession.completedParas} Paras</span>
             </div>
 
-            <div className="bg-[#F8FAFC] py-2 px-1.5 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[9px] text-[#64748B] font-bold block leading-none">Remaining</span>
-              <span className="text-xs font-extrabold text-[#0F172A] mt-1 block">
+            <div className="bg-[#F4F8F5] py-2 px-1.5 rounded-xl border border-emerald-100">
+              <span className="text-[9px] text-emerald-800/70 font-bold block leading-none">Remaining</span>
+              <span className="text-xs font-black text-emerald-950 mt-1 block">
                 {Math.max(0, daurSession.totalParas - daurSession.completedParas)} Paras
               </span>
             </div>
 
-            <div className="bg-[#F8FAFC] py-2 px-1.5 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[9px] text-[#64748B] font-bold block leading-none">Estimated End</span>
-              <span className="text-xs font-extrabold text-[#2563EB] mt-1 block leading-tight">{daurSession.estimatedEnd}</span>
+            <div className="bg-[#F4F8F5] py-2 px-1.5 rounded-xl border border-emerald-100">
+              <span className="text-[9px] text-emerald-800/70 font-bold block leading-none">Estimated End</span>
+              <span className="text-xs font-extrabold text-emerald-700 mt-1 block leading-tight">{daurSession.estimatedEnd}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. CLEAN & TACTILE TODAY'S READING CARD (Simple, Clear, Fast Action) */}
-      <div className="bg-gradient-to-b from-[#EFF8FF] to-[#E5F2FF] rounded-3xl p-4 border border-[#BAE6FD] shadow-xs space-y-3 relative overflow-hidden">
+      {/* 4. CLEAN & TACTILE TODAY'S READING CARD */}
+      <div className="bg-gradient-to-b from-[#EBF7F2] to-[#E2F2EB] rounded-3xl p-4 border border-emerald-200 shadow-xs space-y-3 relative overflow-hidden">
         {/* Subtle Watermark Mosque Art in background */}
-        <div className="absolute right-0 bottom-0 opacity-15 pointer-events-none">
-          <svg width="150" height="90" viewBox="0 0 150 90" fill="#2563EB">
+        <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+          <svg width="150" height="90" viewBox="0 0 150 90" fill="#047857">
             <path d="M75 10 C65 10 60 25 60 45 L60 90 L90 90 L90 45 C90 25 85 10 75 10 Z" />
             <path d="M35 35 C30 35 25 45 25 60 L25 90 L45 90 L45 60 C45 45 40 35 35 35 Z" />
             <path d="M115 35 C110 35 105 45 105 60 L105 90 L125 90 L125 60 C125 45 120 35 115 35 Z" />
@@ -233,11 +249,11 @@ export const HomeScreen: React.FC = () => {
 
         {/* Header */}
         <div className="flex items-center justify-between relative z-10">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1E3A8A]">
-            <BookOpen className="w-4 h-4 text-[#2563EB]" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-950">
+            <BookOpen className="w-4 h-4 text-emerald-600" />
             <span>Today&apos;s Reading</span>
           </div>
-          <span className="text-[10px] font-extrabold text-[#1D4ED8] bg-white/90 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-[#BFDBFE] shadow-2xs">
+          <span className="text-[10px] font-extrabold text-emerald-800 bg-white/90 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-emerald-200 shadow-2xs">
             {daurSession.todayPagesRead}/{daurSession.todayTargetPages} Pages Done ({todayPercent}%)
           </span>
         </div>
@@ -246,13 +262,13 @@ export const HomeScreen: React.FC = () => {
         <div className="bg-white/95 backdrop-blur-xs p-3.5 rounded-2xl border border-white shadow-2xs space-y-2.5 relative z-10">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-xl font-extrabold text-[#0F172A] tracking-tight flex items-center gap-1.5">
+              <div className="text-xl font-black text-emerald-950 tracking-tight flex items-center gap-1.5 font-heading">
                 <span>Page {daurSession.todayStartPage}</span>
-                <span className="text-sm font-bold text-[#3B82F6]">➔</span>
+                <span className="text-sm font-bold text-emerald-600">➔</span>
                 <span>{daurSession.todayEndPage}</span>
               </div>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-xs font-bold text-[#2563EB]">
+                <span className="text-xs font-bold text-emerald-700">
                   {daurSession.todayTargetPages} Pages Daily Target
                 </span>
               </div>
@@ -263,42 +279,42 @@ export const HomeScreen: React.FC = () => {
               onClick={markTodayDone}
               className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 ${
                 daurSession.isTodayDone
-                  ? "bg-[#10B981] text-white hover:bg-[#059669]"
-                  : "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
+                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                  : "bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500"
               }`}
             >
               <Check className="w-4 h-4 stroke-[3]" />
-              <span>{daurSession.isTodayDone ? "All Done" : "Mark Today"}</span>
+              <span>{daurSession.isTodayDone ? "All Done ✓" : "Mark Today"}</span>
             </button>
           </div>
 
           {/* Portion terms & Quick Stepper */}
-          <div className="flex items-center justify-between pt-2 border-t border-[#F1F5F9]">
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
             <div className="flex items-center gap-1.5">
               <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full border ${todayPortion.badgeColor} shadow-2xs`}>
                 {todayPortion.portionNameUrdu} ({todayPortion.portionNameEnglish})
               </span>
-              <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-white text-[#1E3A8A] border border-[#CBD5E1]">
+              <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-white text-emerald-900 border border-emerald-200">
                 Para {todayParaInfo.paraNumber}
               </span>
             </div>
 
             {/* Quick +/- Stepper */}
             <div className="flex items-center gap-1.5">
-              <div className="flex items-center bg-[#F1F5F9] rounded-xl p-0.5 border border-[#E2E8F0]">
+              <div className="flex items-center bg-emerald-50/70 rounded-xl p-0.5 border border-emerald-200">
                 <button
                   onClick={() => updateTodayPages(daurSession.todayPagesRead - 1)}
-                  className="w-6 h-6 rounded-lg bg-white flex items-center justify-center text-xs text-[#334155] cursor-pointer shadow-2xs active:scale-90"
+                  className="w-6 h-6 rounded-lg bg-white flex items-center justify-center text-xs text-emerald-950 cursor-pointer shadow-2xs active:scale-90"
                   aria-label="Decrease pages"
                 >
                   <Minus className="w-2.5 h-2.5" />
                 </button>
-                <span className="text-xs font-black text-[#0F172A] px-2">
+                <span className="text-xs font-black text-emerald-950 px-2">
                   {daurSession.todayPagesRead}
                 </span>
                 <button
                   onClick={() => updateTodayPages(daurSession.todayPagesRead + 1)}
-                  className="w-6 h-6 rounded-lg bg-white flex items-center justify-center text-xs text-[#334155] cursor-pointer shadow-2xs active:scale-90"
+                  className="w-6 h-6 rounded-lg bg-white flex items-center justify-center text-xs text-emerald-950 cursor-pointer shadow-2xs active:scale-90"
                   aria-label="Increase pages"
                 >
                   <Plus className="w-2.5 h-2.5" />
@@ -313,9 +329,9 @@ export const HomeScreen: React.FC = () => {
               setTargetReaderPage(daurSession.todayStartPage);
               setIsQuranReaderOpen(true);
             }}
-            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#1E3A8A] to-[#2563EB] hover:from-[#172554] hover:to-[#1D4ED8] active:scale-[0.98] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800 active:scale-[0.98] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
           >
-            <BookOpen className="w-4 h-4 text-[#93C5FD]" />
+            <BookOpen className="w-4 h-4 text-amber-300" />
             <span>Open Quran PDF (Read Page {daurSession.todayStartPage} ➔ {daurSession.todayEndPage})</span>
           </button>
         </div>
@@ -323,13 +339,13 @@ export const HomeScreen: React.FC = () => {
 
       {/* 5. DAILY TIMINGS / SLOTS BREAKDOWN CHECKLIST */}
       {renderedSlots.length > 0 && (
-        <div className="bg-white rounded-3xl p-4 border border-[#E5E7EB] shadow-2xs space-y-3">
-          <div className="flex items-center justify-between text-[11px] font-extrabold text-[#1E3A8A]">
+        <div className="bg-white rounded-3xl p-4 border border-[#DDE7E2] shadow-2xs space-y-3">
+          <div className="flex items-center justify-between text-[11px] font-extrabold text-emerald-950">
             <div className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#2563EB]" />
+              <Clock className="w-3.5 h-3.5 text-emerald-600" />
               <span className="uppercase tracking-wider">Daily Timing Slots &amp; Page Breakdown</span>
             </div>
-            <span className="text-[10px] font-bold text-[#2563EB] hover:underline cursor-pointer">
+            <span className="text-[10px] font-bold text-emerald-700 hover:underline cursor-pointer">
               Tap to check off ➔
             </span>
           </div>
@@ -341,8 +357,8 @@ export const HomeScreen: React.FC = () => {
                 onClick={() => toggleDailySlot(slot.id)}
                 className={`p-3 rounded-2xl border flex items-center justify-between cursor-pointer transition-all shadow-2xs relative ${
                   slot.completed
-                    ? "bg-[#ECFDF5] border-[#A7F3D0] text-[#065F46]"
-                    : "bg-white border-[#E5E7EB] text-[#111827] hover:border-[#2563EB]/40 hover:bg-[#F8FAFC]"
+                    ? "bg-emerald-50/90 border-emerald-300 text-emerald-900"
+                    : "bg-white border-slate-200 text-slate-900 hover:border-emerald-300 hover:bg-emerald-50/30"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -350,8 +366,8 @@ export const HomeScreen: React.FC = () => {
                   <div
                     className={`w-6 h-6 rounded-xl flex items-center justify-center border transition-all ${
                       slot.completed
-                        ? "bg-[#10B981] border-[#10B981] text-white shadow-xs"
-                        : "bg-white border-[#CBD5E1]"
+                        ? "bg-emerald-600 border-emerald-600 text-white shadow-xs"
+                        : "bg-white border-slate-300"
                     }`}
                   >
                     {slot.completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -360,11 +376,11 @@ export const HomeScreen: React.FC = () => {
                   <div>
                     {/* Slot Name & Time */}
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-extrabold leading-tight">
+                      <span className="text-xs font-extrabold leading-tight text-emerald-950">
                         {slot.name}
                       </span>
-                      <span className="text-[10px] text-[#6B7280] font-medium flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+                      <span className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         {slot.timeLabel}
                       </span>
                     </div>
@@ -372,12 +388,12 @@ export const HomeScreen: React.FC = () => {
                     {/* Highlighted Page Range & Portion Term (Pav Para, Aadha Para, etc.) */}
                     <div className="flex flex-wrap items-center gap-1.5 mt-1">
                       {/* Exact Page Range */}
-                      <span className="text-[10px] font-extrabold text-[#2563EB] bg-[#EFF6FF] px-2 py-0.5 rounded-md border border-[#BFDBFE]">
+                      <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                         Pages {slot.startPage} — {slot.endPage} ({slot.targetPages} Pages)
                       </span>
 
                       {/* Portion Term */}
-                      <span className="text-[10px] font-bold text-[#059669] bg-[#ECFDF5] px-2 py-0.5 rounded-md border border-[#A7F3D0]">
+                      <span className="text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200">
                         {slot.portionLabel}
                       </span>
                     </div>
@@ -388,8 +404,8 @@ export const HomeScreen: React.FC = () => {
                 <span
                   className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full shrink-0 ml-2 ${
                     slot.completed
-                      ? "bg-[#10B981] text-white shadow-2xs"
-                      : "bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE]"
+                      ? "bg-emerald-600 text-white shadow-2xs"
+                      : "bg-emerald-50 text-emerald-700 border border-emerald-200"
                   }`}
                 >
                   {slot.completed ? "Done ✓" : "6 pts"}
@@ -404,55 +420,55 @@ export const HomeScreen: React.FC = () => {
       <div className="grid grid-cols-4 gap-2">
         <button
           onClick={() => setIsContinueLauncherOpen(true)}
-          className="bg-white p-2.5 rounded-2xl border border-[#E5E7EB] hover:border-[#10B981] hover:bg-[#F0FDF4] transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
+          className="bg-white p-2.5 rounded-2xl border border-[#DDE7E2] hover:border-emerald-400 hover:bg-emerald-50/50 transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#DCFCE7] text-[#16A34A] flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
             📖
           </div>
-          <span className="text-[11px] font-bold text-[#111827] leading-tight">Quran Daur</span>
+          <span className="text-[11px] font-bold text-emerald-950 leading-tight">Quran Daur</span>
         </button>
 
         <button
           onClick={() => setIsPlanSetupOpen(true)}
-          className="bg-white p-2.5 rounded-2xl border border-[#E5E7EB] hover:border-[#9333EA] hover:bg-[#FAF5FF] transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
+          className="bg-white p-2.5 rounded-2xl border border-[#DDE7E2] hover:border-amber-400 hover:bg-amber-50/50 transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#F3E8FF] text-[#9333EA] flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
             🎯
           </div>
-          <span className="text-[11px] font-bold text-[#111827] leading-tight">Daur Plan</span>
+          <span className="text-[11px] font-bold text-emerald-950 leading-tight">Daur Plan</span>
         </button>
 
         <button
           onClick={() => setActiveTab("calendar")}
-          className="bg-white p-2.5 rounded-2xl border border-[#E5E7EB] hover:border-[#2563EB] hover:bg-[#EFF6FF] transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
+          className="bg-white p-2.5 rounded-2xl border border-[#DDE7E2] hover:border-teal-400 hover:bg-teal-50/50 transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#DBEAFE] text-[#2563EB] flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
             📊
           </div>
-          <span className="text-[11px] font-bold text-[#111827] leading-tight">Calendar</span>
+          <span className="text-[11px] font-bold text-emerald-950 leading-tight">Calendar</span>
         </button>
 
         <button
           onClick={() => setActiveTab("notes")}
-          className="bg-white p-2.5 rounded-2xl border border-[#E5E7EB] hover:border-[#D97706] hover:bg-[#FFFBEB] transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
+          className="bg-white p-2.5 rounded-2xl border border-[#DDE7E2] hover:border-amber-400 hover:bg-amber-50/50 transition-all flex flex-col items-center justify-center text-center shadow-2xs group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#FEF3C7] text-[#D97706] flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center text-lg mb-1 group-hover:scale-105 transition-transform">
             📝
           </div>
-          <span className="text-[11px] font-bold text-[#111827] leading-tight">Quran Notes</span>
+          <span className="text-[11px] font-bold text-emerald-950 leading-tight">Quran Notes</span>
         </button>
       </div>
 
       {/* 7. DAUR CALENDAR / HEATMAP GRID */}
-      <div className="bg-white rounded-3xl p-4 border border-[#E5E7EB] shadow-2xs space-y-3">
+      <div className="bg-white rounded-3xl p-4 border border-[#DDE7E2] shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-[#111827]">
-            Daur Calendar
+          <h3 className="text-xs font-bold text-emerald-950 font-heading">
+            Daur Habit Calendar
           </h3>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#4B5563]">
-            <ChevronLeft className="w-3.5 h-3.5 text-[#9CA3AF] cursor-pointer" />
-            <span>Oct 2026</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[#9CA3AF] cursor-pointer" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
+            <ChevronLeft className="w-3.5 h-3.5 text-slate-400 cursor-pointer" />
+            <span>Active Cycle</span>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 cursor-pointer" />
           </div>
         </div>
 
@@ -460,7 +476,7 @@ export const HomeScreen: React.FC = () => {
         <div className="space-y-1">
           <div className="grid grid-cols-7 gap-1 text-center">
             {daysOfWeek.map((day) => (
-              <span key={day} className="text-[9px] font-semibold text-[#9CA3AF]">
+              <span key={day} className="text-[9px] font-semibold text-slate-400">
                 {day}
               </span>
             ))}
@@ -471,7 +487,7 @@ export const HomeScreen: React.FC = () => {
               <div
                 key={item.day}
                 title={`${item.dateStr}: ${item.pagesRead} pages (${item.level})`}
-                className={`h-5 rounded-md ${getHeatmapColor(item.level)} flex items-center justify-center text-[8px] font-bold text-white/90 transition-transform hover:scale-110 cursor-pointer`}
+                className={`h-5 rounded-md ${getHeatmapColor(item.level)} flex items-center justify-center text-[8px] font-bold transition-transform hover:scale-110 cursor-pointer`}
               >
                 {item.day <= 31 ? item.day : ""}
               </div>
@@ -480,25 +496,25 @@ export const HomeScreen: React.FC = () => {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-between pt-2 border-t border-[#F3F4F6] text-[9px] text-[#6B7280]">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[9px] text-slate-500 font-medium">
           <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-xs bg-[#E5E7EB]" />
-            <span>Not Done</span>
+            <span className="w-2 h-2 rounded-xs bg-slate-200" />
+            <span>0 Pages</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-xs bg-[#FCA5A5]" />
+            <span className="w-2 h-2 rounded-xs bg-rose-300" />
             <span>Poor</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-xs bg-[#86EFAC]" />
+            <span className="w-2 h-2 rounded-xs bg-emerald-400" />
             <span>Low</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-xs bg-[#38A169]" />
+            <span className="w-2 h-2 rounded-xs bg-emerald-600" />
             <span>Good</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-xs bg-[#1E7B58]" />
+            <span className="w-2 h-2 rounded-xs bg-emerald-800" />
             <span>Excellent</span>
           </div>
         </div>
@@ -507,22 +523,22 @@ export const HomeScreen: React.FC = () => {
       {/* 8. WEAK AREAS WIDGET */}
       <div 
         onClick={() => setActiveTab("notes")}
-        className="bg-white rounded-3xl p-4 border border-[#E5E7EB] shadow-2xs flex items-center justify-between hover:border-[#DC2626]/40 transition-all cursor-pointer"
+        className="bg-white rounded-3xl p-4 border border-[#DDE7E2] shadow-2xs flex items-center justify-between hover:border-rose-300 transition-all cursor-pointer"
       >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#FEE2E2] text-[#DC2626] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-base">
             ⚠️
           </div>
           <div>
-            <h4 className="text-xs font-bold text-[#111827]">
+            <h4 className="text-xs font-bold text-emerald-950">
               Weak Areas &amp; Revision Flagged
             </h4>
-            <p className="text-[11px] text-[#6B7280]">
-              {weakParas.length} Paras needing review • Tap to see notes
+            <p className="text-[11px] text-emerald-800/70 font-medium">
+              {weakParas.length} Paras flagged • Tap to see notes
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1 text-xs font-bold text-[#2563EB]">
+        <div className="flex items-center gap-1 text-xs font-bold text-emerald-700">
           <span>View</span>
           <ChevronRight className="w-3.5 h-3.5" />
         </div>
@@ -530,28 +546,28 @@ export const HomeScreen: React.FC = () => {
 
       {/* 9. QUICK STATS */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="bg-white p-3 rounded-2xl border border-[#E5E7EB] text-center shadow-2xs">
-          <div className="w-7 h-7 rounded-lg bg-[#FEF2F2] text-[#EF4444] flex items-center justify-center mx-auto mb-1">
+        <div className="bg-white p-3 rounded-2xl border border-[#DDE7E2] text-center shadow-2xs">
+          <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-1">
             <Flame className="w-4 h-4" />
           </div>
-          <div className="text-xs font-extrabold text-[#111827]">{daurSession.streakDays} Day</div>
-          <span className="text-[10px] text-[#6B7280]">Streak</span>
+          <div className="text-xs font-black text-emerald-950">{daurSession.streakDays} Day</div>
+          <span className="text-[10px] text-emerald-800/70 font-medium">Streak</span>
         </div>
 
-        <div className="bg-white p-3 rounded-2xl border border-[#E5E7EB] text-center shadow-2xs">
-          <div className="w-7 h-7 rounded-lg bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center mx-auto mb-1">
+        <div className="bg-white p-3 rounded-2xl border border-[#DDE7E2] text-center shadow-2xs">
+          <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-1">
             <Calendar className="w-4 h-4" />
           </div>
-          <div className="text-xs font-extrabold text-[#111827]">{daurSession.monthlyCompleted}/{daurSession.totalParas}</div>
-          <span className="text-[10px] text-[#6B7280]">This Month</span>
+          <div className="text-xs font-black text-emerald-950">{daurSession.completedParas}/{daurSession.totalParas}</div>
+          <span className="text-[10px] text-emerald-800/70 font-medium">Paras</span>
         </div>
 
-        <div className="bg-white p-3 rounded-2xl border border-[#E5E7EB] text-center shadow-2xs">
-          <div className="w-7 h-7 rounded-lg bg-[#ECFDF5] text-[#10B981] flex items-center justify-center mx-auto mb-1">
+        <div className="bg-white p-3 rounded-2xl border border-[#DDE7E2] text-center shadow-2xs">
+          <div className="w-7 h-7 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center mx-auto mb-1">
             <TrendingUp className="w-4 h-4" />
           </div>
-          <div className="text-xs font-extrabold text-[#111827]">{daurSession.parasPerDay}</div>
-          <span className="text-[10px] text-[#6B7280]">Paras/Day</span>
+          <div className="text-xs font-black text-emerald-950">{daurSession.parasPerDay}</div>
+          <span className="text-[10px] text-emerald-800/70 font-medium">Paras/Day</span>
         </div>
       </div>
 
@@ -564,7 +580,7 @@ export const HomeScreen: React.FC = () => {
         isFirstTime={!daurSession.planConfig?.isConfigured}
       />
 
-      {/* Daur Milestones & Insights Detail Modal (Opens on Tap) */}
+      {/* Daur Milestones & Insights Detail Modal */}
       <DaurDetailModal
         isOpen={isDaurDetailOpen}
         onClose={() => setIsDaurDetailOpen(false)}
@@ -573,7 +589,7 @@ export const HomeScreen: React.FC = () => {
         onOpenPlanSetup={() => setIsPlanSetupOpen(true)}
       />
 
-      {/* Today's Reading Detailed Progress Modal (Opens on Tap) */}
+      {/* Today's Reading Detailed Progress Modal */}
       <TodayProgressModal
         isOpen={isTodayProgressOpen}
         onClose={() => setIsTodayProgressOpen(false)}
@@ -615,3 +631,4 @@ export const HomeScreen: React.FC = () => {
     </div>
   );
 };
+

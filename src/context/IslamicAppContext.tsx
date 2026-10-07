@@ -39,6 +39,9 @@ interface IslamicAppContextType {
   isCloudSynced: boolean;
   syncWithCloud: () => Promise<void>;
   logout: () => void;
+  resetAllData: () => void;
+  updateUserPhoto: (avatarUrl?: string, bannerUrl?: string) => void;
+  updateUserProfile: (data: Partial<UserAuth>) => void;
   toast: ToastMsg | null;
   showToast: (msg: string) => void;
 }
@@ -342,6 +345,62 @@ export const IslamicAppProvider: React.FC<{ children: ReactNode }> = ({ children
     saveNotesToStorage(updated);
   };
 
+  const resetAllData = () => {
+    try {
+      localStorage.removeItem("daur_app_paras");
+      localStorage.removeItem("daur_app_notes");
+      localStorage.removeItem("daur_app_session");
+      localStorage.removeItem("daur_offline_progress");
+    } catch {}
+
+    setParas(INITIAL_PARAS);
+    setQuranNotes([]);
+    setDaurSession(DEFAULT_DAUR_SESSION);
+    setHeatmap(SAMPLE_HEATMAP_DATA);
+
+    // Sync reset to firebase
+    const userKey = auth.username || "hamza";
+    try {
+      set(ref(rtdb, `users/${userKey}`), {
+        daurSession: DEFAULT_DAUR_SESSION,
+        quranNotes: [],
+        paras: INITIAL_PARAS,
+        updatedAt: new Date().toISOString()
+      }).catch(() => {});
+    } catch {}
+
+    showToast("All data cleared! Fresh Daur started from scratch 🌿");
+  };
+
+  const updateUserPhoto = (avatarUrl?: string, bannerUrl?: string) => {
+    const updated: UserAuth = {
+      ...auth,
+      avatarUrl: avatarUrl !== undefined ? avatarUrl : auth.avatarUrl,
+      bannerUrl: bannerUrl !== undefined ? bannerUrl : auth.bannerUrl
+    };
+    setAuth(updated);
+    try {
+      localStorage.setItem("daur_app_auth", JSON.stringify(updated));
+      const userKey = auth.username || "hamza";
+      set(ref(rtdb, `users/${userKey}/auth`), updated).catch(() => {});
+    } catch {}
+    showToast("Photo updated successfully! ✨");
+  };
+
+  const updateUserProfile = (data: Partial<UserAuth>) => {
+    const updated: UserAuth = {
+      ...auth,
+      ...data
+    };
+    setAuth(updated);
+    try {
+      localStorage.setItem("daur_app_auth", JSON.stringify(updated));
+      const userKey = auth.username || "hamza";
+      set(ref(rtdb, `users/${userKey}/auth`), updated).catch(() => {});
+    } catch {}
+    showToast("Profile changes saved ✅");
+  };
+
   const logout = () => {
     const emptyAuth: UserAuth = {
       isLoggedIn: false,
@@ -390,6 +449,9 @@ export const IslamicAppProvider: React.FC<{ children: ReactNode }> = ({ children
         isCloudSynced,
         syncWithCloud,
         logout,
+        resetAllData,
+        updateUserPhoto,
+        updateUserProfile,
         toast,
         showToast
       }}

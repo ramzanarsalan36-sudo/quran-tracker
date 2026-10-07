@@ -43,6 +43,9 @@ export interface UserAuth {
   username: string;
   city: string;
   country: string;
+  avatarUrl?: string; // base64 or custom image url or preset
+  bannerUrl?: string; // custom hero banner image url
+  role?: string;      // e.g. "Hafiz / Admin"
 }
 
 export interface DailySlot {

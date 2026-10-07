@@ -70,22 +70,22 @@ export const QuranScreen: React.FC = () => {
   };
 
   return (
-    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F5F8F7]">
+    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F2F7F4]">
       {/* Header with Top-Left Back Arrow */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setActiveTab("daur")}
-            className="w-9 h-9 rounded-2xl bg-white border border-[#E5E7EB] text-[#111827] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] hover:text-[#2563EB] flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
+            className="w-9 h-9 rounded-2xl bg-white border border-[#DDE7E2] text-emerald-950 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
             aria-label="Back to Daur Dashboard"
           >
             <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-[#111827] tracking-tight leading-tight">
+            <h1 className="text-lg font-bold text-emerald-950 tracking-tight leading-tight font-heading">
               Daur Plan &amp; 30 Paras
             </h1>
-            <p className="text-[11px] text-[#6B7280]">
+            <p className="text-[11px] text-emerald-800/70 font-medium">
               Quarter progress &amp; revision tracker
             </p>
           </div>
@@ -93,55 +93,55 @@ export const QuranScreen: React.FC = () => {
 
         <button
           onClick={() => setIsPlanSetupOpen(true)}
-          className="px-3 py-1.5 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE] text-[#2563EB] text-xs font-bold hover:bg-[#DBEAFE] cursor-pointer shadow-2xs"
+          className="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold hover:bg-emerald-100 cursor-pointer shadow-2xs"
         >
           ⚙️ Change Plan
         </button>
       </div>
 
       {/* Daur Plan Summary Card with Hero Artwork */}
-      <div className="bg-white rounded-3xl border border-[#BAE6FD] shadow-2xs overflow-hidden space-y-0">
-        <div className="relative p-4 text-[#0F2942] min-h-[90px] flex flex-col justify-center border-b border-[#BAE6FD]/60">
+      <div className="bg-white rounded-3xl border border-emerald-200 shadow-2xs overflow-hidden space-y-0">
+        <div className="relative p-4 text-[#0F2942] min-h-[90px] flex flex-col justify-center border-b border-emerald-100">
           <div 
             className="absolute inset-0 bg-cover bg-center opacity-85"
             style={{ backgroundImage: "url('/images/hero_banner.jpg')" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#93C5FD]/90 via-[#BFDBFE]/80 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#04241B]/90 via-[#06382B]/80 to-transparent pointer-events-none" />
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1D4ED8] bg-white/80 px-2 py-0.5 rounded-full border border-white">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 bg-black/40 px-2 py-0.5 rounded-full border border-amber-400/40">
                 30 Paras Overview
               </span>
-              <h2 className="text-base font-extrabold text-[#0B2545] mt-1">
-                {daurSession.planConfig?.planName || "Full Quran Daur"}
+              <h2 className="text-base font-extrabold text-white mt-1 font-heading">
+                {daurSession.planConfig?.planName || "30 Days Complete Daur"}
               </h2>
             </div>
-            <span className="text-xs font-extrabold text-[#1D4ED8] bg-white/90 px-3 py-1 rounded-full border border-[#BFDBFE] shadow-2xs">
+            <span className="text-xs font-extrabold text-amber-300 bg-black/50 px-3 py-1 rounded-full border border-amber-400/40 shadow-2xs">
               {completedCount} / 30 Finished
             </span>
           </div>
         </div>
 
-        <div className="p-4 space-y-3 bg-gradient-to-b from-white to-[#F8FAFC]">
-          <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+        <div className="p-4 space-y-3 bg-gradient-to-b from-white to-[#F9FCFA]">
+          <div className="w-full h-2 rounded-full bg-emerald-100 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#10B981] transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-teal-500 to-amber-400 transition-all duration-500"
               style={{ width: `${Math.round((completedCount / 30) * 100)}%` }}
             />
           </div>
 
           <div className="grid grid-cols-3 gap-2 pt-1 text-center text-[11px]">
-            <div className="bg-[#F8FAFC] p-2 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[10px] text-[#6B7280] font-medium block">Pace Target</span>
-              <span className="font-extrabold text-[#111827]">{daurSession.parasPerDay} Para/Day</span>
+            <div className="bg-[#F4F8F5] p-2 rounded-xl border border-emerald-100">
+              <span className="text-[10px] text-emerald-800/70 font-medium block">Pace Target</span>
+              <span className="font-extrabold text-emerald-950">{daurSession.parasPerDay} Para/Day</span>
             </div>
-            <div className="bg-[#F8FAFC] p-2 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[10px] text-[#6B7280] font-medium block">Target End</span>
-              <span className="font-extrabold text-[#111827]">{daurSession.estimatedEnd}</span>
+            <div className="bg-[#F4F8F5] p-2 rounded-xl border border-emerald-100">
+              <span className="text-[10px] text-emerald-800/70 font-medium block">Target End</span>
+              <span className="font-extrabold text-emerald-950">{daurSession.estimatedEnd}</span>
             </div>
-            <div className="bg-[#F8FAFC] p-2 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[10px] text-[#6B7280] font-medium block">Flagged Weak</span>
-              <span className="font-extrabold text-[#DC2626]">
+            <div className="bg-[#F4F8F5] p-2 rounded-xl border border-emerald-100">
+              <span className="text-[10px] text-emerald-800/70 font-medium block">Flagged Weak</span>
+              <span className="font-extrabold text-rose-600">
                 {paras.filter(p => p.isWeakArea).length} Paras
               </span>
             </div>
@@ -151,24 +151,24 @@ export const QuranScreen: React.FC = () => {
 
       {/* Search Bar */}
       <div className="relative">
-        <Search className="w-4 h-4 text-[#6B7280] absolute left-3.5 top-1/2 -translate-y-1/2" />
+        <Search className="w-4 h-4 text-emerald-800/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search Para number, name, or Surah..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-[#E5E7EB] text-xs font-medium text-[#111827] placeholder-[#6B7280]/70 focus:outline-none focus:border-[#2563EB] shadow-2xs"
+          className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-[#DDE7E2] text-xs font-medium text-emerald-950 placeholder-emerald-800/40 focus:outline-none focus:border-emerald-600 shadow-2xs"
         />
       </div>
 
       {/* Sub-tabs: 30 Paras vs Surahs */}
-      <div className="flex bg-[#E5E7EB] p-1 rounded-2xl border border-[#D1D5DB]">
+      <div className="flex bg-[#DDE7E2] p-1 rounded-2xl border border-emerald-200">
         <button
           onClick={() => setActiveSubTab("paras")}
           className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeSubTab === "paras"
-              ? "bg-[#2563EB] text-white shadow-xs"
-              : "text-[#4B5563] hover:text-[#111827]"
+              ? "bg-emerald-700 text-white shadow-xs"
+              : "text-emerald-950/70 hover:text-emerald-950"
           }`}
         >
           30 Paras (Quarter Tracker)
@@ -177,8 +177,8 @@ export const QuranScreen: React.FC = () => {
           onClick={() => setActiveSubTab("surahs")}
           className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeSubTab === "surahs"
-              ? "bg-[#2563EB] text-white shadow-xs"
-              : "text-[#4B5563] hover:text-[#111827]"
+              ? "bg-emerald-700 text-white shadow-xs"
+              : "text-emerald-950/70 hover:text-emerald-950"
           }`}
         >
           Surahs (114)
@@ -196,24 +196,24 @@ export const QuranScreen: React.FC = () => {
                 key={para.paraNumber}
                 className={`bg-white rounded-3xl p-4 border transition-all shadow-2xs ${
                   para.isWeakArea
-                    ? "border-[#EF4444] bg-[#FEF2F2]/20"
+                    ? "border-rose-400 bg-rose-50/20"
                     : para.completedQuarter === "aek"
-                    ? "border-[#10B981]/50 bg-[#F0FDF4]/30"
-                    : "border-[#E5E7EB]"
+                    ? "border-emerald-400 bg-emerald-50/30"
+                    : "border-[#DDE7E2]"
                 }`}
               >
                 {/* Top Row: Number, Name, Range, Note + Flag Buttons */}
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center font-bold text-sm shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-extrabold text-sm shrink-0 border border-emerald-200">
                       {para.paraNumber}
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-[#111827] flex items-center gap-1.5">
+                      <h3 className="text-sm font-bold text-emerald-950 flex items-center gap-1.5 font-heading">
                         <span>Para {para.paraNumber}</span>
-                        <span className="font-arabic text-sm text-[#2563EB]">{para.nameArabic}</span>
+                        <span className="font-arabic text-sm text-emerald-800 font-bold">{para.nameArabic}</span>
                       </h3>
-                      <p className="text-[10px] text-[#6B7280]">
+                      <p className="text-[10px] text-emerald-800/70">
                         {para.nameUrdu} • Pages {para.startPage}–{para.endPage}
                       </p>
                     </div>
@@ -226,9 +226,9 @@ export const QuranScreen: React.FC = () => {
                         setReaderStartPage(para.startPage);
                         setIsReaderOpen(true);
                       }}
-                      className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-[#1E3A8A] to-[#2563EB] hover:from-[#172554] hover:to-[#1D4ED8] text-white text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95"
+                      className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800 text-white text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95"
                     >
-                      <BookOpen className="w-3 h-3 text-[#93C5FD]" />
+                      <BookOpen className="w-3 h-3 text-amber-300" />
                       <span>Read</span>
                     </button>
 
@@ -238,8 +238,8 @@ export const QuranScreen: React.FC = () => {
                       title={para.isWeakArea ? "Flagged as Weak Area" : "Mark as Weak Area"}
                       className={`p-1.5 rounded-xl border text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                         para.isWeakArea
-                          ? "bg-[#FEF2F2] border-[#EF4444] text-[#DC2626]"
-                          : "bg-[#F9FAFB] border-[#E5E7EB] text-[#9CA3AF] hover:text-[#DC2626]"
+                          ? "bg-rose-50 border-rose-400 text-rose-600"
+                          : "bg-slate-50 border-slate-200 text-slate-400 hover:text-rose-600"
                       }`}
                     >
                       <AlertTriangle className="w-3 h-3" />

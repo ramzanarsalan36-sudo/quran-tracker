@@ -92,25 +92,25 @@ export const QuranNotesScreen: React.FC = () => {
   };
 
   return (
-    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F5F8F7]">
+    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F2F7F4]">
       {/* Top Header with Back Arrow */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setActiveTab("daur")}
-            className="w-9 h-9 rounded-2xl bg-white border border-[#E5E7EB] text-[#111827] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] hover:text-[#2563EB] flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
+            className="w-9 h-9 rounded-2xl bg-white border border-[#DDE7E2] text-emerald-950 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
             aria-label="Back to Daur Dashboard"
           >
             <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-[#111827] tracking-tight flex items-center gap-2 leading-tight">
+            <h1 className="text-lg font-bold text-emerald-950 tracking-tight flex items-center gap-2 leading-tight font-heading">
               <span>Quran Notes</span>
-              <span className="text-xs bg-[#2563EB]/10 text-[#2563EB] px-2 py-0.5 rounded-full font-bold">
+              <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
                 {quranNotes.length}
               </span>
             </h1>
-            <p className="text-[11px] text-[#6B7280]">
+            <p className="text-[11px] text-emerald-800/70 font-medium">
               Mutashabihat, Tajweed &amp; Daur logs
             </p>
           </div>
@@ -118,7 +118,7 @@ export const QuranNotesScreen: React.FC = () => {
 
         <button
           onClick={() => openNewNote()}
-          className="px-3 py-2 rounded-2xl bg-[#2563EB] text-white text-xs font-bold flex items-center gap-1.5 shadow-xs hover:bg-[#1D4ED8] transition-all cursor-pointer active:scale-95"
+          className="px-3 py-2 rounded-2xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs hover:bg-emerald-700 transition-all cursor-pointer active:scale-95"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>New Note</span>
@@ -126,13 +126,13 @@ export const QuranNotesScreen: React.FC = () => {
       </div>
 
       {/* Weak Areas Quick Bar */}
-      <div className="bg-white rounded-3xl p-4 border border-[#E5E7EB] shadow-2xs space-y-2">
+      <div className="bg-white rounded-3xl p-4 border border-[#DDE7E2] shadow-2xs space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-[#DC2626] flex items-center gap-1.5">
+          <span className="font-bold text-rose-600 flex items-center gap-1.5">
             <AlertTriangle className="w-3.5 h-3.5" />
             <span>Flagged Weak Paras ({weakParas.length})</span>
           </span>
-          <span className="text-[10px] text-[#6B7280]">Tap to toggle flag</span>
+          <span className="text-[10px] text-emerald-800/60 font-medium">Tap to toggle flag</span>
         </div>
 
         <div className="flex flex-wrap gap-1.5">
@@ -142,8 +142,8 @@ export const QuranNotesScreen: React.FC = () => {
               onClick={() => toggleWeakArea(p.paraNumber)}
               className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer ${
                 p.isWeakArea
-                  ? "bg-[#FEF2F2] border-[#EF4444] text-[#DC2626] shadow-2xs"
-                  : "bg-[#F9FAFB] border-[#E5E7EB] text-[#6B7280] hover:bg-neutral-100"
+                  ? "bg-rose-50 border-rose-400 text-rose-600 shadow-2xs"
+                  : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-emerald-50 hover:text-emerald-900"
               }`}
             >
               Para {p.paraNumber} {p.isWeakArea ? "⚠️" : ""}
@@ -247,17 +247,17 @@ export const QuranNotesScreen: React.FC = () => {
                       title={note.pinned ? "Unpin note" : "Pin note to top"}
                       className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${
                         note.pinned
-                          ? "bg-[#2563EB]/10 text-[#2563EB]"
-                          : "text-[#6B7280] hover:bg-neutral-100"
+                          ? "bg-amber-100 text-amber-700"
+                          : "text-slate-400 hover:bg-slate-100"
                       }`}
                     >
-                      <Pin className={`w-3.5 h-3.5 ${note.pinned ? "fill-[#2563EB]" : ""}`} />
+                      <Pin className={`w-3.5 h-3.5 ${note.pinned ? "fill-amber-600 text-amber-600" : ""}`} />
                     </button>
 
                     <button
                       onClick={() => openEditNote(note)}
                       title="Edit note"
-                      className="w-7 h-7 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-neutral-100 flex items-center justify-center transition-colors cursor-pointer"
+                      className="w-7 h-7 rounded-lg text-slate-400 hover:text-emerald-950 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                     </button>
@@ -265,7 +265,7 @@ export const QuranNotesScreen: React.FC = () => {
                     <button
                       onClick={() => deleteQuranNote(note.id)}
                       title="Delete note"
-                      className="w-7 h-7 rounded-lg text-[#6B7280] hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer"
+                      className="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -273,21 +273,21 @@ export const QuranNotesScreen: React.FC = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-sm font-bold text-[#111827] leading-snug mb-1.5">
+                <h3 className="text-sm font-bold text-emerald-950 leading-snug mb-1.5 font-heading">
                   {note.title}
                 </h3>
 
                 {/* Content */}
-                <p className="text-xs text-[#374151] whitespace-pre-wrap leading-relaxed">
+                <p className="text-xs text-slate-700 whitespace-pre-wrap leading-relaxed">
                   {note.content}
                 </p>
 
                 {/* Footer */}
-                <div className="mt-3 pt-2.5 border-t border-[#F3F4F6] flex items-center justify-between text-[10px] text-[#6B7280]">
+                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
                   <span>Logged: {note.date}</span>
                   {note.pinned && (
-                    <span className="text-[#2563EB] font-bold flex items-center gap-1">
-                      <Pin className="w-2.5 h-2.5 fill-[#2563EB]" /> Pinned
+                    <span className="text-amber-700 font-bold flex items-center gap-1">
+                      <Pin className="w-2.5 h-2.5 fill-amber-600 text-amber-600" /> Pinned
                     </span>
                   )}
                 </div>

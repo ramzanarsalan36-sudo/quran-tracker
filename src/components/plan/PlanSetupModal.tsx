@@ -253,22 +253,22 @@ export const PlanSetupModal: React.FC<PlanSetupModalProps> = ({
                   }}
                   className={`p-3 rounded-2xl border text-left transition-all cursor-pointer relative ${
                     isSelected
-                      ? "bg-[#EFF6FF] border-[#2563EB] ring-2 ring-[#2563EB]/20 shadow-xs"
+                      ? "bg-emerald-50 border-emerald-600 ring-2 ring-emerald-600/20 shadow-xs"
                       : "bg-[#F9FAFB] border-[#E5E7EB] hover:bg-white"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-white text-[#2563EB] border border-[#BFDBFE]">
+                    <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-white text-emerald-800 border border-emerald-200">
                       {plan.badge}
                     </span>
                     {isSelected && (
-                      <div className="w-4 h-4 rounded-full bg-[#2563EB] text-white flex items-center justify-center">
+                      <div className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center">
                         <Check className="w-2.5 h-2.5 stroke-[3]" />
                       </div>
                     )}
                   </div>
                   <h4 className="text-xs font-bold text-[#111827]">{plan.name}</h4>
-                  <div className="text-[10px] font-bold text-[#2563EB] mt-0.5">{plan.portionText}</div>
+                  <div className="text-[10px] font-bold text-emerald-700 mt-0.5">{plan.portionText}</div>
                   <p className="text-[9px] text-[#6B7280] mt-0.5">{plan.desc}</p>
                 </button>
               );
@@ -442,10 +442,10 @@ export const PlanSetupModal: React.FC<PlanSetupModalProps> = ({
         <div className="pt-2 shrink-0">
           <button
             onClick={handleSave}
-            className="w-full py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
+            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
           >
             <span>{isFirstTime ? "Start My Daur Journey" : "Apply & Update Plan"}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-amber-300" />
           </button>
         </div>
       </div>

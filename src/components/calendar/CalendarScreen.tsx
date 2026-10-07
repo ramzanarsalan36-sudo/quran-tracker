@@ -24,34 +24,34 @@ export const CalendarScreen: React.FC = () => {
   const getHeatmapColor = (level: string) => {
     switch (level) {
       case "excellent":
-        return "bg-[#1E7B58] text-white";
+        return "bg-emerald-800 text-white";
       case "good":
-        return "bg-[#38A169] text-white";
+        return "bg-emerald-600 text-white";
       case "low":
-        return "bg-[#86EFAC] text-gray-800";
+        return "bg-emerald-400 text-emerald-950";
       case "poor":
-        return "bg-[#FCA5A5] text-gray-800";
+        return "bg-rose-300 text-rose-950";
       default:
-        return "bg-[#E5E7EB] text-gray-400";
+        return "bg-slate-200/80 text-slate-500";
     }
   };
 
   return (
-    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F5F8F7]">
+    <div className="px-4 pt-5 pb-28 space-y-4 bg-[#F2F7F4]">
       {/* Header with Top-Left Back Arrow */}
       <div className="flex items-center gap-2.5">
         <button
           onClick={() => setActiveTab("daur")}
-          className="w-9 h-9 rounded-2xl bg-white border border-[#E5E7EB] text-[#111827] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] hover:text-[#2563EB] flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
+          className="w-9 h-9 rounded-2xl bg-white border border-[#DDE7E2] text-emerald-950 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
           aria-label="Back to Daur Dashboard"
         >
           <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
         </button>
         <div>
-          <h1 className="text-lg font-bold text-[#111827] tracking-tight leading-tight">
+          <h1 className="text-lg font-bold text-emerald-950 tracking-tight leading-tight font-heading">
             Daur Stats &amp; Calendar
           </h1>
-          <p className="text-[11px] text-[#6B7280]">
+          <p className="text-[11px] text-emerald-800/70 font-medium">
             Consistency heatmap &amp; Hifz retention metrics
           </p>
         </div>
@@ -59,44 +59,44 @@ export const CalendarScreen: React.FC = () => {
 
       {/* 3 Overview Stat Cards */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="bg-white p-3 rounded-2xl border border-[#E5E7EB] text-center shadow-2xs">
-          <div className="w-8 h-8 rounded-xl bg-[#FEF2F2] text-[#EF4444] flex items-center justify-center mx-auto mb-1">
+        <div className="bg-white p-3 rounded-2xl border border-[#DDE7E2] text-center shadow-2xs">
+          <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-1">
             <Flame className="w-4 h-4" />
           </div>
-          <div className="text-sm font-extrabold text-[#111827]">{daurSession.streakDays} Days</div>
-          <span className="text-[10px] text-[#6B7280]">Current Streak</span>
+          <div className="text-sm font-extrabold text-emerald-950">{daurSession.streakDays} Days</div>
+          <span className="text-[10px] text-emerald-800/70 font-medium">Current Streak</span>
         </div>
 
-        <div className="bg-white p-3 rounded-2xl border border-[#E5E7EB] text-center shadow-2xs">
-          <div className="w-8 h-8 rounded-xl bg-[#EFF6FF] text-[#2563EB] flex items-center justify-center mx-auto mb-1">
+        <div className="bg-white p-3 rounded-2xl border border-[#DDE7E2] text-center shadow-2xs">
+          <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-1">
             <CalIcon className="w-4 h-4" />
           </div>
-          <div className="text-sm font-extrabold text-[#111827]">{daurSession.monthlyCompleted}/30</div>
-          <span className="text-[10px] text-[#6B7280]">This Month</span>
+          <div className="text-sm font-extrabold text-emerald-950">{daurSession.completedParas}/30</div>
+          <span className="text-[10px] text-emerald-800/70 font-medium">Paras Done</span>
         </div>
 
-        <div className="bg-white p-3 rounded-2xl border border-[#E5E7EB] text-center shadow-2xs">
-          <div className="w-8 h-8 rounded-xl bg-[#ECFDF5] text-[#10B981] flex items-center justify-center mx-auto mb-1">
+        <div className="bg-white p-3 rounded-2xl border border-[#DDE7E2] text-center shadow-2xs">
+          <div className="w-8 h-8 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mx-auto mb-1">
             <TrendingUp className="w-4 h-4" />
           </div>
-          <div className="text-sm font-extrabold text-[#111827]">{daurSession.parasPerDay}</div>
-          <span className="text-[10px] text-[#6B7280]">Paras / Day</span>
+          <div className="text-sm font-extrabold text-emerald-950">{daurSession.parasPerDay}</div>
+          <span className="text-[10px] text-emerald-800/70 font-medium">Paras / Day</span>
         </div>
       </div>
 
       {/* Monthly Heatmap Card */}
-      <div className="bg-white rounded-3xl p-4 border border-[#E5E7EB] shadow-2xs space-y-4">
+      <div className="bg-white rounded-3xl p-4 border border-[#DDE7E2] shadow-2xs space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-[#111827]">
+            <h3 className="text-sm font-bold text-emerald-950 font-heading">
               Daur Activity Heatmap
             </h3>
-            <p className="text-[10px] text-[#6B7280]">
+            <p className="text-[10px] text-emerald-800/70 font-medium">
               Daily reading consistency tracking
             </p>
           </div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#111827] bg-[#F9FAFB] px-2.5 py-1 rounded-xl border border-[#E5E7EB]">
-            <ChevronLeft className="w-3.5 h-3.5 text-[#9CA3AF] cursor-pointer" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-950 bg-emerald-50/70 px-2.5 py-1 rounded-xl border border-emerald-200">
+            <ChevronLeft className="w-3.5 h-3.5 text-slate-400 cursor-pointer" />
             <span>{selectedMonth}</span>
             <ChevronRight className="w-3.5 h-3.5 text-[#9CA3AF] cursor-pointer" />
           </div>

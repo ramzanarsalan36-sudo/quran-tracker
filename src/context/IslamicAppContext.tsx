@@ -38,15 +38,16 @@ interface IslamicAppContextType {
   setIsPlanSetupOpen: (open: boolean) => void;
   isCloudSynced: boolean;
   syncWithCloud: () => Promise<void>;
+  logout: () => void;
   toast: ToastMsg | null;
   showToast: (msg: string) => void;
 }
 
 const INITIAL_AUTH: UserAuth = {
-  isLoggedIn: true,
-  name: "Hamza",
-  email: "hamza@daur.app",
-  username: "hamza",
+  isLoggedIn: false,
+  name: "",
+  email: "",
+  username: "",
   city: "Makkah",
   country: "Saudi Arabia"
 };
@@ -341,6 +342,22 @@ export const IslamicAppProvider: React.FC<{ children: ReactNode }> = ({ children
     saveNotesToStorage(updated);
   };
 
+  const logout = () => {
+    const emptyAuth: UserAuth = {
+      isLoggedIn: false,
+      name: "",
+      email: "",
+      username: "",
+      city: "Makkah",
+      country: "Saudi Arabia"
+    };
+    setAuth(emptyAuth);
+    try {
+      localStorage.removeItem("daur_app_auth");
+    } catch {}
+    showToast("Signed out of Daur 🌙");
+  };
+
   return (
     <IslamicAppContext.Provider
       value={{
@@ -372,6 +389,7 @@ export const IslamicAppProvider: React.FC<{ children: ReactNode }> = ({ children
         setIsPlanSetupOpen,
         isCloudSynced,
         syncWithCloud,
+        logout,
         toast,
         showToast
       }}

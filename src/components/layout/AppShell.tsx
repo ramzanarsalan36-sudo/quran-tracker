@@ -6,7 +6,7 @@ import { BottomNavbar } from "@/components/layout/BottomNavbar";
 import { Check } from "lucide-react";
 
 export const AppShell: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { toast } = useIslamicApp();
+  const { toast, auth } = useIslamicApp();
 
   return (
     <div className="min-h-screen bg-[#E5ECE9] flex justify-center items-start lg:py-6 lg:px-4">
@@ -24,8 +24,8 @@ export const AppShell: React.FC<{ children: ReactNode }> = ({ children }) => {
       <div className="w-full max-w-[420px] min-h-screen bg-[#F5F8F7] lg:rounded-[40px] shadow-2xl relative flex flex-col overflow-hidden border border-[#D1D5DB]">
         {children}
 
-        {/* Safe-Area Bottom Navbar */}
-        <BottomNavbar />
+        {/* Safe-Area Bottom Navbar (Only when logged in) */}
+        {auth.isLoggedIn && <BottomNavbar />}
       </div>
     </div>
   );

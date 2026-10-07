@@ -174,22 +174,25 @@ export const PlanSetupModal: React.FC<PlanSetupModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
       <div 
-        className="w-full max-w-md bg-white rounded-3xl p-5 shadow-2xl border border-[#E5E7EB] max-h-[92vh] overflow-y-auto space-y-4"
+        className="w-full max-w-md bg-white rounded-t-[32px] sm:rounded-3xl p-5 sm:p-6 shadow-2xl border-t sm:border border-[#E2E8F0] max-h-[90vh] flex flex-col space-y-4 animate-in slide-in-from-bottom duration-200"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Mobile Pull Handle */}
+        <div className="w-12 h-1 bg-slate-300 rounded-full mx-auto -mt-2 mb-1 sm:hidden shrink-0" />
+
         {/* Header */}
-        <div className="flex items-start justify-between pb-3 border-b border-[#F3F4F6]">
+        <div className="flex items-start justify-between pb-3 border-b border-[#F1F5F9] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1E3A8A] to-[#2563EB] text-white flex items-center justify-center text-lg shadow-xs">
+            <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#1E3A8A] to-[#2563EB] text-white flex items-center justify-center text-base shadow-xs shrink-0">
               🎯
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#111827]">
+              <h2 className="text-sm font-semibold text-[#0F172A]">
                 {isFirstTime ? "Choose Your Daur Plan" : "Customize Daur Plan"}
               </h2>
-              <p className="text-[11px] text-[#6B7280]">
+              <p className="text-[11px] font-light text-[#64748B]">
                 Select completion timeframe &amp; daily portion breakdown
               </p>
             </div>
@@ -198,12 +201,16 @@ export const PlanSetupModal: React.FC<PlanSetupModalProps> = ({
           {!isFirstTime && (
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full bg-[#F3F4F6] text-[#6B7280] hover:text-[#111827] cursor-pointer"
+              className="p-1.5 rounded-full bg-[#F1F5F9] text-[#64748B] hover:text-[#0F172A] cursor-pointer active:scale-95 transition-all"
+              aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
+
+        {/* Scrollable Body */}
+        <div className="overflow-y-auto space-y-4 pr-0.5 flex-1">
 
         {/* Quran Rehal 3D Banner */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#EFF6FF] via-[#DBEAFE] to-[#EFF6FF] border border-[#BFDBFE] p-3 flex items-center gap-3 shadow-2xs">
@@ -429,14 +436,18 @@ export const PlanSetupModal: React.FC<PlanSetupModalProps> = ({
           </select>
         </div>
 
-        {/* Save & Activate Button */}
-        <button
-          onClick={handleSave}
-          className="w-full py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-extrabold shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
-        >
-          <span>{isFirstTime ? "Start My Daur Journey" : "Apply & Update Plan"}</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        </div>
+
+        {/* Save & Activate Button Footer */}
+        <div className="pt-2 shrink-0">
+          <button
+            onClick={handleSave}
+            className="w-full py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
+          >
+            <span>{isFirstTime ? "Start My Daur Journey" : "Apply & Update Plan"}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

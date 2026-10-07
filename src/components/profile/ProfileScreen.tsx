@@ -17,11 +17,12 @@ import {
   X,
   FileText,
   BookOpen,
-  ArrowLeft
+  ArrowLeft,
+  LogOut
 } from "lucide-react";
 
 export const ProfileScreen: React.FC = () => {
-  const { auth, setAuth, setActiveTab, paras, quranNotes, daurSession, showToast, syncWithCloud, isCloudSynced } = useIslamicApp();
+  const { auth, setAuth, setActiveTab, paras, quranNotes, daurSession, showToast, syncWithCloud, isCloudSynced, logout } = useIslamicApp();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [name, setName] = useState<string>(auth.name);
@@ -90,6 +91,17 @@ export const ProfileScreen: React.FC = () => {
           showToast("Offline Quran cache cleared. Re-caching...");
           await cacheQuranPdf();
           showToast("Quran re-downloaded for offline use ✓");
+        }
+      }
+    },
+    {
+      id: "logout",
+      label: "Sign Out / Switch Account",
+      icon: LogOut,
+      badge: "Account",
+      onClick: () => {
+        if (window.confirm("Are you sure you want to sign out?")) {
+          logout();
         }
       }
     }

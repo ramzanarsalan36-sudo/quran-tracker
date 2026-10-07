@@ -8,9 +8,14 @@ import { QuranScreen } from "@/components/quran/QuranScreen";
 import { QuranNotesScreen } from "@/components/notes/QuranNotesScreen";
 import { CalendarScreen } from "@/components/calendar/CalendarScreen";
 import { ProfileScreen } from "@/components/profile/ProfileScreen";
+import { AuthScreen } from "@/components/auth/AuthScreen";
 
 const MainContent: React.FC = () => {
-  const { activeTab } = useIslamicApp();
+  const { activeTab, auth } = useIslamicApp();
+
+  if (!auth.isLoggedIn) {
+    return <AuthScreen />;
+  }
 
   switch (activeTab) {
     case "daur":
